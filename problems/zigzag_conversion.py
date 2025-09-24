@@ -43,8 +43,6 @@ Constraints:
 
 """
 
-import math
-
 
 class Solution:
     def _validateInput(self, s, numRows):
