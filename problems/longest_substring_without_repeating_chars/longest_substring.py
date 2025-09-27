@@ -36,48 +36,44 @@ class Solution:
         if len(s) >= 5 * 10**4:
             raise ValueError("The length of the string is too large")
 
+    def lengthOfLongestSubstring2(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+
+        self.validateInput(s)
+
+        substrings = []
+        i = 0
+
+        # O(k) complexity.
+        # k -> length of each substring.
+        for char in s:
+            if len(substrings) <= i:
+                substrings.append([])
+
+            curr_substring = substrings[i]
+
+            if char not in curr_substring:
+                curr_substring += char
+            else:
+                i += 1
+
+        # Worst-case scenario len(s) substrings are created -> O(n**2) complexity.
+        return len(max(substrings, key=len))
+
     def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-
         self.validateInput(s)
+        char_index = {}
+        # Chained assignment
+        max_length = start = 0
 
-        substrings = []
-        i = 0
-        for char in s:
-            if len(substrings) <= i:
-                substrings.append([])
+        # O(n) time complexity
+        for i, char in enumerate(s):
+            if char in char_index and char_index[char] >= start:
+                start = char_index[char] + 1
+            char_index[char] = i
+            max_length = max(max_length, i - start + 1)
 
-            curr_substring = substrings[i]
-
-            if char not in curr_substring:
-                curr_substring += char
-            else:
-                i += 1
-
-        return len(max(substrings, key=len))
-
-    def length_of_longest_substring_recursive(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-
-        self.validateInput(s)
-
-        substrings = []
-        i = 0
-        for char in s:
-            if len(substrings) <= i:
-                substrings.append([])
-
-            curr_substring = substrings[i]
-
-            if char not in curr_substring:
-                curr_substring += char
-            else:
-                i += 1
-
-        return len(max(substrings, key=len))
+        return max_length
